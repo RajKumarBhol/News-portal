@@ -6,7 +6,13 @@ const Newsboard = ({category}) =>{
     useEffect(()=>{
         
             const cat = category ? category.toLowerCase() : "general";
-            const url = `https://newsapi.org/v2/top-headlines?country=us&category=${cat}&apiKey=${import.meta.env.VITE_API_KEY}`;
+            const apiKey = import.meta.env.VITE_API_KEY;
+            if (!apiKey) {
+                console.error("API key is missing. Please set VITE_API_KEY in environment variables.");
+                setArticles([]);
+                return;
+            }
+            const url = `https://newsapi.org/v2/top-headlines?country=us&category=${cat}&apiKey=${apiKey}`;
             fetch(url)
               .then((response) => response.json())
               .then((data) => setArticles(data.articles || []))
